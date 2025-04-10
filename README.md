@@ -1,7 +1,6 @@
 # 📄 Sistema de Emissão de Notas Fiscais
 
 Bem-vindo ao desafio de backend!  
-Neste projeto, desenvolvi uma API RESTful para **emissão de Notas Fiscais**, com foco em **validações fiscais**, **cálculo de impostos**, e **persistência segura de dados**.
 
 ---
 
@@ -86,71 +85,6 @@ A resposta incluirá:
 
 ---
 
-## 🔐 Autenticação
-
-Todas as rotas (exceto login) são protegidas via token JWT.
-
-- `POST /auth/login`  
-  Envia `email` e `senha` e retorna token de acesso.
-
----
-
-## 🚀 Como Rodar Localmente
-
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/emissor-notas-fiscais.git
-   cd emissor-notas-fiscais
-   ```
-
-2. Instale as dependências:
-   ```bash
-   npm install
-   ```
-
-3. Configure o banco de dados:
-   - Crie um `.env` com base no `.env.example`
-   - Rode as migrações:
-     ```bash
-     npx prisma migrate dev
-     ```
-
-4. Inicie o servidor:
-   ```bash
-   npm run dev
-   ```
-
----
-
-## 📘 Documentação da API
-
-Após iniciar o projeto, acesse:
-
-```
-http://localhost:3000/api-docs
-```
-
-> A documentação é gerada automaticamente via Swagger.
-
----
-
-## 🧪 Testes
-
-Rode os testes com:
-
-```bash
-npm run test
-```
-
----
-
-## ✍️ Autor
-
-Desenvolvido por **[Seu Nome]**  
-[linkedin.com/in/seu-perfil](https://linkedin.com/in/seu-perfil)
-
----
-
 ## 🏁 Considerações Finais
 
-Este projeto foi desenvolvido como parte de um desafio backend, com o objetivo de aplicar boas práticas, regras de negócio reais e validações fiscais. Fique à vontade para sugerir melhorias ou entrar em contato!
+Este projeto tem o objetivo de aplicar boas práticas, regras de negócio reais e validações fiscais!
