@@ -9,8 +9,7 @@ Neste projeto, desenvolvi uma API RESTful para **emissão de Notas Fiscais**, co
 
 - **Node.js** + **TypeScript**
 - **Express.js**
-- **Prisma ORM**
-- **PostgreSQL**
+- **MariaDB**
 - **Joi** para validações
 - **JWT** para autenticação
 - **Swagger** para documentação da API
