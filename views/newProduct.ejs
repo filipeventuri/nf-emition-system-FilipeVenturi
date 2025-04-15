@@ -1,0 +1,26 @@
+<%- include ("partials/header") %>
+<%- include ("partials/navbar") %>
+<div class="container">
+    <hr>
+    <div class="card mb-5">
+        <div class="card-header">
+            <h2> Cadastro de Produto</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/product/save">
+                <input  class="form-control" type="text" name="name" placeholder="Nome">
+                <br>
+                <input  class="form-control" type="text" name="description" placeholder="Descrição">
+                <br>
+                <input  class="form-control" type="number" name="price" placeholder="Preço">
+                <br>
+                <input  class="form-control" type="number" name="amount" placeholder="Quantidade">
+                <br>
+                <input  class="form-control" type="number" name="ncm" placeholder="NCM">
+                <br>
+                <button class="btn btn-success">Cadastrar</button>
+            </form>
+        </div>
+
+    </div>
+</div>

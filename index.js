@@ -16,7 +16,13 @@ connection.authenticate().then(()=>{
 
 app.get('/', (req,res)=>{
     res.render('index');
+});
+
+app.get('/newProduct', (req,res)=>{
+    res.render('newProduct');
 })
+
+
 
 app.listen(8080, ()=>{
     console.log('Server Running!')
