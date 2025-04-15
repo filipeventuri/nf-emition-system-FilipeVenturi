@@ -3,7 +3,7 @@ const connection = require('./database/database');
 const bodyParser = require('body-parser');
 const joi = require('joi');
 const Product = require('./models/Product/Product');
-const slugify= require('slugify');
+const slugify = require('slugify');
 
 const app = express();
 app.set("view engine", "ejs");
@@ -48,7 +48,7 @@ app.get('/newProduct', (req,res)=>{
     res.render('newProduct');
 })
 
-app.post('/product/save', async(req,res)=>{
+app.post('/products', async(req,res)=>{
     var { error, value } = productSchema.validate(req.body, { abortEarly: false });
 
   if (error) {
@@ -70,19 +70,25 @@ app.post('/product/save', async(req,res)=>{
         amount,
         ncm
       });
-      return res.redirect("/newProduct");
+      return res.redirect("/products");
     } else {
       var newAmount = existingProduct.amount + amount;
       await Product.update(
         { amount: newAmount },
         { where: { name: slugifiedName } }
       );
-      return res.redirect("/newProduct");
+      return res.redirect("/products");
     }
   } catch (err) {
     console.error("Erro no banco de dados:", err);
     return res.status(500).json({ error: "Erro interno no servidor" });
   }
+})
+
+app.get('/products', (req,res)=>{
+  Product.findAll().then((products)=>{
+    res.render("products", {products:products});  
+});
 })
 
 app.listen(8080, ()=>{

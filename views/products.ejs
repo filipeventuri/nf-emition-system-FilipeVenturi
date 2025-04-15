@@ -1,0 +1,35 @@
+<%- include ("partials/header.ejs") %>
+<%- include ("partials/navbar.ejs")%>
+<body>
+    <div class="container">
+        <hr>
+        <h2> Produtos Cadastrados</h2>
+        <br>
+        <a class="btn btn-success" href="/newProduct">Cadastrar Produto</a>
+        <hr>
+        
+       
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th>Quantidade</th>
+                    <th>NCM</th>
+                </tr>
+            </thead>
+            <% products.forEach((one)=>{ %>
+        <tbody>
+            
+                <th><%= one.id %></th>
+                <th><%= one.name %></th>
+                <th><%= one.description %></th>
+                <th><%= one.price %></th>
+                <th><%= one.amount %></th>
+                <th><%= one.ncm %></th>
+                          
+        </tbody>
+        <% }) %>
+</body>
