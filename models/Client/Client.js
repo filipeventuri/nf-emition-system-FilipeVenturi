@@ -52,7 +52,6 @@ const Client = connection.define("clients", {
     }
   });
 
-
 Client.sync({force:false});
 
 module.exports = Client;

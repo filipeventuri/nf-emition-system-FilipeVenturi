@@ -38,7 +38,7 @@ const productSchema = joi.object({
       'string.pattern.base': 'O NCM deve ter 8 dígitos numéricos',
       'any.required': 'O NCM é obrigatório',
     }),
-  });
+  }); // validação do produto
 
 app.get('/', (req,res)=>{
     res.render('index');
@@ -83,13 +83,13 @@ app.post('/products', async(req,res)=>{
     console.error("Erro no banco de dados:", err);
     return res.status(500).json({ error: "Erro interno no servidor" });
   }
-})
+}) //Cadastro de produtos
 
 app.get('/products', (req,res)=>{
   Product.findAll().then((products)=>{
     res.render("products", {products:products});  
 });
-})
+}) //Listagem de produtos
 
 app.listen(8080, ()=>{
     console.log('Servidor rodando!')
