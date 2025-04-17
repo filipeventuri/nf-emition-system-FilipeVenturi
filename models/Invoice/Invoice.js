@@ -21,8 +21,6 @@ const Invoice = connection.define("invoices", {
       }
   });
 
-Invoice.belo
-
 Invoice.sync({force:false});
 
 module.exports = Invoice;
