@@ -5,7 +5,7 @@ const Client = require('../Client/Client')
 const Invoice = connection.define("invoices", {
     xmlBase64: {
       type: sequelize.TEXT,
-      allowNull: false
+      allowNull: true
     }, 
   cfop: {
     type: sequelize.STRING(4),

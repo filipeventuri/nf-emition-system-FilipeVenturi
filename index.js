@@ -234,6 +234,17 @@ app.get('/clients', (req,res)=>{
 });
 }) //Listagem de produtos
 
+app.get('/buy', (req,res)=>{
+  Product.findAll().then((products)=>{
+    res.render("buyInterface", {products:products});  
+});
+})
+
+app.post('buy', (req,res)=>{
+
+  
+})
+
 app.listen(8080, ()=>{
     console.log('Servidor rodando!')
 })
