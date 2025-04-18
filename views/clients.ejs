@@ -1,0 +1,26 @@
+<%- include ("partials/header.ejs") %>
+<%- include ("partials/navbar.ejs")%>
+<body>
+    <div class="container">
+        <hr>
+        <h2> Clientes Cadastrados</h2>
+        <br>
+        <a class="btn btn-success" href="/newClient">Cadastrar novo cliente</a>
+        <hr>
+        
+       
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                </tr>
+            </thead>
+            <% clients.forEach((one)=>{ %>
+        <tbody>
+            
+                <th><%= one.id %></th>
+                <th><%= one.name %></th>
+        </tbody>
+        <% }) %>
+</body>

@@ -89,7 +89,7 @@ const productSchema = joi.object({
       'string.pattern.base': 'O CEP deve ter 8 dígitos (sem hífen)',
       'any.required': 'O CEP é obrigatório',
     })
-  }); // validação do client
+  }); // validação do cliente
 
 app.get('/', (req,res)=>{
     res.render('index');
@@ -183,6 +183,12 @@ app.post('/products', async(req,res)=>{
 app.get('/products', (req,res)=>{
   Product.findAll().then((products)=>{
     res.render("products", {products:products});  
+});
+}) //Listagem de produtos
+
+app.get('/clients', (req,res)=>{
+  Client.findAll().then((clients)=>{
+    res.render("clients", {clients:clients});  
 });
 }) //Listagem de produtos
 
