@@ -7,7 +7,7 @@ const Client = connection.define("clients", {
       allowNull: false
     },
     password:{
-        type: sequelize.INTEGER(6),
+        type: sequelize.STRING,
         allowNull:false
     },
     email: {

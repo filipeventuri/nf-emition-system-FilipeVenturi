@@ -6,12 +6,21 @@ const Product = require('./models/Product/Product');
 const Client = require('./models/Client/Client');
 const slugify = require('slugify');
 const emailValidator = require('email-validator');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const JWT = require("./middleware/JWT");
+const cookieParser = require('cookie-parser');
+
+
+
 
 const app = express();
+const JWT_SECRET = "a8e1d29f3e2c4b6c0fd5f90a8c43b18b21f3f9c278e78d5e9993d7f22f69d4eaa4a9e1f0ef4a2923e4c28f1d2a9f0db1c14b7a891e4a6c9ef9d2bde88a6e17cbd";
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 connection.authenticate().then(()=>{
     console.log("Banco de dados acessado!")
@@ -114,12 +123,14 @@ app.post('/clients', async(req,res)=>{
   var { name, password, email, phone, document, street, number, complement, neighborhood, city, state, zipCode } = value;
 
   try {
+    var salt = bcrypt.genSaltSync(10);
+    var hash= bcrypt.hashSync(password, salt);
     var existingClient = await Client.findOne({ where: { email: email } });
     var existingEmail = emailValidator.validate(email);
     if (!existingClient && existingEmail) {
       await Client.create({
         name,
-        password,
+        password: hash,
         email,
         phone,
         document,
@@ -180,7 +191,38 @@ app.post('/products', async(req,res)=>{
   }
 }) //Cadastro de produtos
 
-app.get('/products', (req,res)=>{
+app.get('/login', (req,res)=>{
+  res.render('clientLogin');
+})
+
+app.post('/authenticate',(req, res) => {
+  const { email, password } = req.body;
+
+  Client.findOne({ where: { email: email } }).then(client => {
+      if (client) {
+          const correct = bcrypt.compareSync(password, client.password);
+          if (correct) {
+              const token = jwt.sign(
+                  { id: client.id, email: client.email },
+                  JWT_SECRET,
+                  { expiresIn: "1h" }
+              );
+
+              res.cookie("token", token, {
+                httpOnly: true,
+                maxAge: 3600000
+            });
+
+              res.redirect('/products')
+          } else {
+              res.status(401).json({ auth: false, message: "Senha incorreta" });
+          }
+      } else {
+          res.status(404).json({ auth: false, message: "Usuário não encontrado" });
+      }
+  }); 
+})
+app.get('/products', JWT, (req,res)=>{
   Product.findAll().then((products)=>{
     res.render("products", {products:products});  
 });
