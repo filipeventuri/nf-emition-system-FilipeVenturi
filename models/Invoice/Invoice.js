@@ -21,6 +21,9 @@ const Invoice = connection.define("invoices", {
       }
   });
 
+Client.hasMany(Invoice, { foreignKey: 'clientId' });
+Invoice.belongsTo(Client, { foreignKey: 'clientId' });
+
 Invoice.sync({force:false});
 
 module.exports = Invoice;

@@ -3,7 +3,9 @@ const connection = require('./database/database');
 const bodyParser = require('body-parser');
 const joi = require('joi');
 const Product = require('./models/Product/Product');
+const Client = require('./models/Client/Client');
 const slugify = require('slugify');
+const emailValidator = require('email-validator');
 
 const app = express();
 app.set("view engine", "ejs");
@@ -40,12 +42,105 @@ const productSchema = joi.object({
     }),
   }); // validação do produto
 
+  const clientSchema = joi.object({
+    name: joi.string().min(3).max(100).required().messages({
+      'string.min': 'O nome deve ter no mínimo 3 caracteres',
+      'string.max': 'O nome deve ter no máximo 100 caracteres',
+      'any.required': 'O nome é obrigatório',
+    }),
+    password: joi.string().length(6).pattern(/^\d+$/).required().messages({
+      'string.length': 'A senha deve ter exatamente 6 dígitos',
+      'string.pattern.base': 'A senha deve conter apenas números',
+      'any.required': 'A senha é obrigatória',
+    }),
+    email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required().messages({
+      'string.email': 'O e-mail deve ser válido',
+    }),
+    phone: joi.string().pattern(/^\d{10,11}$/).required().messages({
+      'string.pattern.base': 'O telefone deve ter 10 ou 11 dígitos (DDD + número)',
+      'any.required': 'O telefone é obrigatório',
+    }),
+    document: joi.string().pattern(/^\d{11,14}$/).required().messages({
+      'string.pattern.base': 'O documento deve ter 11 (CPF) ou 14 (CNPJ) dígitos',
+      'any.required': 'O documento é obrigatório',
+    }),
+    street: joi.string().min(3).required().messages({
+      'string.min': 'O logradouro deve ter no mínimo 3 caracteres',
+      'any.required': 'O logradouro é obrigatório',
+    }),
+    number: joi.string().min(1).required().messages({
+      'string.min': 'O número deve ter pelo menos 1 caractere',
+      'any.required': 'O número é obrigatório',
+    }),
+    complement: joi.string().allow(null, '').optional(),
+    neighborhood: joi.string().min(3).required().messages({
+      'string.min': 'O bairro deve ter no mínimo 3 caracteres',
+      'any.required': 'O bairro é obrigatório',
+    }),
+    city: joi.string().min(3).required().messages({
+      'string.min': 'A cidade deve ter no mínimo 3 caracteres',
+      'any.required': 'A cidade é obrigatório',
+    }),
+    state: joi.string().length(2).uppercase().required().messages({
+      'string.length': 'O estado deve ter exatamente 2 caracteres (UF)',
+      'any.required': 'O estado é obrigatório',
+    }),
+    zipCode: joi.string().pattern(/^\d{8}$/).required().messages({
+      'string.pattern.base': 'O CEP deve ter 8 dígitos (sem hífen)',
+      'any.required': 'O CEP é obrigatório',
+    })
+  }); // validação do client
+
 app.get('/', (req,res)=>{
     res.render('index');
 });
 
 app.get('/newProduct', (req,res)=>{
     res.render('newProduct');
+})
+
+app.get('/newClient', (req,res)=>{
+  res.render('newClient');
+})
+
+app.post('/clients', async(req,res)=>{
+  var { error, value } = clientSchema.validate(req.body, { abortEarly: false });
+
+  if (error) {
+    return res.status(400).json({
+      errors: error.details.map((err) => err.message),
+    });
+  }
+  var { name, password, email, phone, document, street, number, complement, neighborhood, city, state, zipCode } = value;
+
+  try {
+    var existingClient = await Client.findOne({ where: { email: email } });
+    var existingEmail = emailValidator.validate(email);
+    if (!existingClient && existingEmail) {
+      await Client.create({
+        name,
+        password,
+        email,
+        phone,
+        document,
+        street,
+        number,
+        complement,
+        neighborhood,
+        city,
+        state,
+        zipCode
+      });
+      return res.redirect("/newClient");
+    } else{
+      return res.redirect("/");
+    }
+  } catch (err) {
+    console.error("Erro no banco de dados:", err);
+    return res.status(500).json({ error: "Erro interno no servidor" });
+  }
+  
+
 })
 
 app.post('/products', async(req,res)=>{

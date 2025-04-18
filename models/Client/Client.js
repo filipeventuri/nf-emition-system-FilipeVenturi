@@ -1,6 +1,5 @@
 const sequelize = require("sequelize");
 const connection = require("../../database/database");
-const Invoice = require('../Invoice/Invoice');
 
 const Client = connection.define("clients", {
     name: {
@@ -16,11 +15,11 @@ const Client = connection.define("clients", {
       allowNull: true
     },
     phone: {
-      type: sequelize.INTEGER,
+      type: sequelize.STRING,
       allowNull: false
     },
     document: {
-      type: sequelize.INTEGER,
+      type: sequelize.STRING,
       allowNull: false
     },
     street: {
@@ -50,20 +49,8 @@ const Client = connection.define("clients", {
     zipCode: {
         type: sequelize.STRING(8),
         allowNull: false
-    },
-    invoiceId: {
-      type: sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'invoices', 
-        key: 'id'
-      }
     }
   });
-
-Client.hasMany(Invoice, { foreignKey: 'invoiceId' });
-Invoice.belongsTo(Client, { foreignKey: 'clientId' });
-
 
 Client.sync({force:false});
 
